@@ -1,13 +1,13 @@
 import { type NextRequest } from 'next/server'
-import { createClient } from './utils/supabase/middleware'
+import { createClient } from './utils/supabase/proxy'
 
 import { NextResponse } from 'next/server'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   try {
     return await createClient(request)
   } catch (e: any) {
-    return NextResponse.json({ error: "MIDDLEWARE CRASH: " + (e?.message || String(e)) }, { status: 500 });
+    return NextResponse.json({ error: "PROXY CRASH: " + (e?.message || String(e)) }, { status: 500 });
   }
 }
 
