@@ -1,11 +1,13 @@
 import Link from 'next/link'
 import { login } from '../auth/actions'
 
-export default function LoginPage({
+export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: { message: string }
+  searchParams: Promise<{ message: string }>
 }) {
+  const { message } = await searchParams;
+
   return (
     <main style={{ 
       minHeight: '100vh', 
@@ -72,9 +74,9 @@ export default function LoginPage({
             />
           </div>
 
-          {searchParams?.message && (
+          {message && (
             <div style={{ padding: '0.75rem', background: 'rgba(255, 42, 42, 0.1)', border: '1px solid var(--accent-primary)', color: 'var(--accent-primary)', borderRadius: '8px', fontSize: '0.85rem', textAlign: 'center' }}>
-              {searchParams.message}
+              {message}
             </div>
           )}
 
