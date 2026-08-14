@@ -1,12 +1,25 @@
 {
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "@supabase/ssr": "^0.9.0",
     "@supabase/supabase-js": "^2.101.1",
+    "@tailwindcss/postcss": "^4.2.4",
+    "autoprefixer": "^10.5.0",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.38.0",
     "lucide-react": "^1.6.0",
     "next": "^15.0.3",
+    "postcss": "^8.5.13",
     "react": "^19.0.0-rc-66855b96-20241106",
     "react-body-highlighter": "^2.0.5",
-    "react-dom": "^19.0.0-rc-66855b96-20241106"
+    "react-dom": "^19.0.0-rc-66855b96-20241106",
+    "react-hook-form": "^7.75.0",
+    "react-is": "^19.2.5",
+    "recharts": "^3.8.1",
+    "tailwind-merge": "^3.5.0",
+    "tailwindcss": "^4.2.4",
+    "zod": "^4.4.2",
+    "zustand": "^5.0.12"
   },
   "scripts": {
     "dev": "next dev",

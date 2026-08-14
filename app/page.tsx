@@ -1,8 +1,11 @@
 import { createClient } from '../utils/supabase/server'
 import { cookies } from 'next/headers'
-import { Dumbbell, Users, Clock, ArrowRight, Activity, Flame, LayoutList, Target } from 'lucide-react'
+import { Dumbbell, Users, Clock, ArrowRight, Activity, Flame, LayoutList, Target, History, Calendar, Calculator, Zap, Search, User, Bot, BarChart3 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+
+import NewsletterButton from './NewsletterButton'
+import LegalLink from './LegalLink'
 
 export default async function Page() {
   const cookieStore = await cookies()
@@ -11,127 +14,332 @@ export default async function Page() {
   const { data: { session } } = await supabase.auth.getSession()
 
   return (
-    <main>
-      {/* Navbar Overlay */}
-      <nav style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 50, padding: '1.5rem 0' }}>
+    <main className="force-dark" style={{ backgroundColor: 'var(--bg-dark)', color: 'var(--text-main)', minHeight: '100vh' }}>
+      <nav style={{
+        position: 'fixed',
+        top: 0, left: 0, right: 0,
+        zIndex: 100,
+        padding: '1.5rem 0',
+        background: 'linear-gradient(to bottom, rgba(10,10,12,0.8), transparent)',
+        backdropFilter: 'blur(10px)'
+      }}>
         <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ fontSize: '2rem', fontWeight: 800, fontFamily: 'Oswald, sans-serif', color: 'white', letterSpacing: '2px' }}>
-            VIGOR<span style={{ color: 'var(--accent-primary)' }}>NOVA</span>
-          </div>
-          <div style={{ display: 'flex', gap: '1rem' }}>
+          <Link href="/" style={{
+            textDecoration: 'none',
+            fontSize: '3.2rem',
+            fontWeight: 950,
+            fontFamily: 'Oswald, sans-serif',
+            color: 'white',
+            letterSpacing: '4px',
+            textTransform: 'uppercase',
+            lineHeight: 1,
+            display: 'flex',
+            alignItems: 'center',
+            textShadow: '0 0 15px rgba(var(--accent-primary-rgb),0.2), 0 0 30px rgba(0,0,0,0.5)',
+            transition: 'all 0.3s ease'
+          }} className="hover-scale">
+            VIGOR<span style={{ color: 'var(--accent-primary)', textShadow: '0 0 20px rgba(var(--accent-primary-rgb),0.4)' }}>NOVA</span>
+          </Link>
+          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
             {session ? (
-              <Link href="/dashboard" className="btn-primary" style={{ padding: '0.6rem 1.5rem', fontSize: '0.9rem', textDecoration: 'none' }}>MI DASHBOARD</Link>
+              <Link href="/dashboard" className="btn-primary auth-btn" style={{ padding: '0.8rem 2.2rem', fontSize: '1.1rem', textDecoration: 'none', borderRadius: '14px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>MI DASHBOARD <ArrowRight size={20} /></Link>
             ) : (
               <>
-                <Link href="/login" className="btn-glass" style={{ padding: '0.6rem 1.2rem', fontSize: '0.9rem', textDecoration: 'none' }}>INICIAR SESIÓN</Link>
-                <Link href="/register" className="btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.9rem', textDecoration: 'none' }}>REGISTRARSE</Link>
+                <Link href="/login" style={{ color: 'white', textDecoration: 'none', fontWeight: 600, fontSize: '1.1rem', transition: 'color 0.3s ease' }} className="hover-text-accent">INICIAR SESIÓN</Link>
+                <Link href="/register" className="btn-primary auth-btn" style={{ padding: '0.8rem 2.2rem', fontSize: '1.1rem', textDecoration: 'none', borderRadius: '14px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>ÚNETE / REGÍSTRATE</Link>
               </>
             )}
           </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
       <section style={{
-        minHeight: '100vh',
+        height: '100vh',
         position: 'relative',
         display: 'flex',
         alignItems: 'center',
-        overflow: 'hidden',
-        paddingTop: '6rem',
-        paddingBottom: '4rem'
+        justifyContent: 'center',
+        overflow: 'hidden'
       }}>
+
+        <style>{`
+          @keyframes heroZoomIn {
+            from { transform: scale(1.08); }
+            to   { transform: scale(1); }
+          }
+          .hero-bg-img {
+            animation: heroZoomIn 1.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+          }
+        `}</style>
+        <div className="hero-bg-img" style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 0
+        }}>
+          <Image
+            src="/dashboard-hero-v2.png"
+            alt="VigorNova Hero"
+            fill
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+            priority
+          />
+        </div>
+
         <div style={{
           position: 'absolute',
-          top: 0, left: 0, right: 0, bottom: 0,
-          background: 'linear-gradient(rgba(10, 10, 12, 0.8), rgba(10, 10, 12, 0.95))',
-          backgroundImage: 'radial-gradient(circle at 70% 30%, rgba(255, 42, 42, 0.15) 0%, transparent 50%), linear-gradient(rgba(10, 10, 12, 0.8), rgba(10, 10, 12, 0.95))',
-          zIndex: -1
+          inset: 0,
+          background: 'linear-gradient(to bottom, rgba(10,10,12,0.55) 0%, rgba(10,10,12,0.35) 40%, rgba(10,10,12,0.72) 80%, rgba(10,10,12,1) 100%)',
+          zIndex: 1
         }} />
 
-        <div className="container" style={{ position: 'relative', zIndex: 10, display: 'flex', flexWrap: 'wrap', gap: '4rem', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }} className="animate-fade-in-down">
-            <span style={{ color: 'var(--accent-primary)', fontWeight: 600, letterSpacing: '3px', fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Flame size={20} /> TU PLATAFORMA FITNESS DE ÉLITE
-            </span>
-            <h1 style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', lineHeight: 1, textShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
-              FORJA TU <br />
-              <span style={{ color: 'transparent', WebkitTextStroke: '2px var(--accent-primary)' }}>RUTINA</span>
-            </h1>
-            <p style={{ fontSize: '1.25rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '2rem', maxWidth: '500px' }}>
-              Crea, planifica y sigue rutinas personalizadas con nuestra tecnología. Accede a miles de ejercicios, optimiza tus tiempos y alcanza resultados reales avalados por datos.
-            </p>
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-              <Link href="/dashboard" className="btn-primary" style={{ textDecoration: 'none' }}>CREAR RUTINA GRATIS <ArrowRight size={20} /></Link>
-            </div>
+        <div style={{
+          position: 'relative',
+          zIndex: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center',
+          gap: '1.8rem',
+          padding: '0 2rem'
+        }}>
+
+          <div className="animate-fade-in-down" style={{
+            letterSpacing: '6px',
+            fontSize: '0.85rem',
+            fontWeight: 700,
+            color: 'var(--accent-primary)',
+            textTransform: 'uppercase',
+            opacity: 0.9
+          }}>
+            TU MEJOR VERSIÓN
           </div>
-          <div className="animate-fade-in-up delay-200" style={{ flex: '1 1 600px', position: 'relative', aspectRatio: '16/9', width: '100%', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 20px 50px rgba(0,0,0,0.8), 0 0 40px rgba(255,42,42,0.2)', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'var(--bg-dark)' }}>
-            <div style={{ width: '200%', height: '200%', transform: 'scale(0.5)', transformOrigin: 'top left', pointerEvents: 'none' }}>
-              <iframe src="/dashboard" title="Vista previa de la plataforma" style={{ width: '100%', height: '100%', border: 'none' }} tabIndex={-1} />
-            </div>
+
+          {/* Título Principal */}
+          <div className="animate-fade-in-down">
+            <h1 style={{
+              fontSize: 'clamp(3.5rem, 9vw, 7.5rem)',
+              fontWeight: 950,
+              lineHeight: 0.9,
+              fontFamily: 'Oswald, sans-serif',
+              letterSpacing: '-2px',
+              margin: 0,
+              textShadow: '0 4px 30px rgba(0,0,0,0.6)'
+            }}>
+              <span style={{ color: 'white' }}>DOMINA TU</span><br />
+              <span style={{ color: 'var(--accent-primary)' }}>POTENCIAL</span>
+            </h1>
+          </div>
+
+          {/* Subtítulo */}
+          <p className="animate-fade-in-up" style={{
+            fontSize: 'clamp(1rem, 2vw, 1.25rem)',
+            color: 'rgba(255,255,255,0.75)',
+            lineHeight: 1.6,
+            fontWeight: 300,
+            letterSpacing: '0.3px',
+            maxWidth: '620px',
+            margin: 0,
+            textShadow: '0 2px 10px rgba(0,0,0,0.5)'
+          }}>
+            La arquitectura digital definitiva para atletas de alto rendimiento.
+          </p>
+
+          {/* CTA */}
+          <div className="animate-fade-in-up" style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', marginTop: '0.5rem' }}>
+            <Link href={session ? "/dashboard" : "/register"} className="btn-primary auth-btn" style={{
+              textDecoration: 'none',
+              padding: '1.4rem 4rem',
+              fontSize: '1.2rem',
+              borderRadius: '18px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.6rem'
+            }}>
+              {session ? 'MI DASHBOARD' : 'EMPEZAR AHORA'} <ArrowRight size={22} />
+            </Link>
+          </div>
+        </div>
+
+
+      </section>
+
+      <section style={{
+        background: '#0a0a0c',
+        padding: '6rem 0'
+      }}>
+        <div className="container" style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '4rem'
+        }}>
+          <h2 className="animate-fade-in-up" style={{
+            color: 'var(--accent-primary)',
+            fontSize: '2.5rem',
+            fontFamily: 'Oswald, sans-serif',
+            fontWeight: 800,
+            letterSpacing: '4px',
+            textTransform: 'uppercase',
+            marginBottom: '0'
+          }}>
+            Funcionalidades de la plataforma
+          </h2>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(5, 1fr)',
+            gap: '3rem',
+            width: '100%',
+            maxWidth: '1000px'
+          }}>
+            {[
+              { icon: <Activity size={24} />, label: 'PROGRESO' },
+              { icon: <Dumbbell size={24} />, label: 'RUTINAS' },
+              { icon: <Target size={24} />, label: 'EJERCICIOS' },
+              { icon: <Users size={24} />, label: 'SOCIAL' },
+              { icon: <User size={24} />, label: 'PERFIL' },
+              { icon: <History size={24} />, label: 'HISTORIAL' },
+              { icon: <Calendar size={24} />, label: 'CALENDARIO' },
+              { icon: <Calculator size={24} />, label: 'CALCULADORA' },
+              { icon: <Search size={24} />, label: 'EXPLORAR' },
+              { icon: <Zap size={24} />, label: 'NOVA IA' }
+            ].map((item, i) => (
+              <div key={i} className="animate-fade-in-up hover-text-accent" style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '1rem',
+                opacity: 0.9,
+                transition: 'all 0.3s ease',
+                animationDelay: `${i * 60}ms`
+              }}>
+                <div style={{
+                  width: '60px',
+                  height: '60px',
+                  borderRadius: '16px',
+                  backgroundColor: 'rgba(255,255,255,0.03)',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white'
+                }}>
+                  {item.icon}
+                </div>
+                <span style={{ fontSize: '0.75rem', fontWeight: 800, letterSpacing: '2px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>{item.label}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Stats/Features Banner */}
-      <div style={{ borderTop: '1px solid var(--glass-border)', borderBottom: '1px solid var(--glass-border)', backgroundColor: 'rgba(25, 25, 28, 0.5)' }}>
-        <div className="container" style={{ display: 'flex', justifyContent: 'space-between', padding: '3rem 0', flexWrap: 'wrap', gap: '2rem' }}>
+      <div style={{
+        borderTop: '1px solid rgba(255,255,255,0.05)',
+        borderBottom: '1px solid rgba(255,255,255,0.05)',
+        backgroundColor: 'rgba(5, 5, 5, 0.8)',
+        backdropFilter: 'blur(20px)',
+        position: 'relative',
+        zIndex: 20
+      }}>
+        <div className="container" style={{ display: 'flex', justifyContent: 'space-between', padding: '4rem 0', flexWrap: 'wrap', gap: '3rem' }}>
           {[
-            { metric: '1000+', label: 'EJERCICIOS ALMACENADOS' },
-            { metric: '50+', label: 'GRUPOS MUSCULARES' },
-            { metric: 'IA', label: 'RECOMENDACIONES' },
-            { metric: '100%', label: 'PERSONALIZABLE' }
+            { metric: '800+', label: 'Ejercicios' },
+            { metric: 'NOVA IA', label: 'Asistente' },
+            { metric: '24/7', label: 'Disponibilidad' }
           ].map((stat, i) => (
-            <div key={i} style={{ textAlign: 'center', flex: 1, minWidth: '150px' }}>
-              <div style={{ fontSize: '3rem', fontFamily: 'Oswald', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.5rem' }}>{stat.metric}</div>
-              <div style={{ color: 'var(--accent-primary)', fontWeight: 600, letterSpacing: '1px', fontSize: '0.9rem' }}>{stat.label}</div>
+            <div key={i} style={{ textAlign: 'center', flex: 1, minWidth: '200px' }}>
+              <div style={{
+                fontSize: '4.5rem',
+                fontFamily: 'Oswald',
+                fontWeight: 900,
+                color: 'white',
+                marginBottom: '0.2rem',
+                lineHeight: 1,
+                letterSpacing: '-2px'
+              }}>{stat.metric}</div>
+              <div style={{
+                color: 'var(--accent-primary)',
+                fontWeight: 800,
+                letterSpacing: '3px',
+                fontSize: '0.9rem',
+                textTransform: 'uppercase'
+              }}>{stat.label}</div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Features Section */}
-      <section className="section container" id="caracteristicas">
-        <div style={{ textAlign: 'center', marginBottom: '4rem' }} className="animate-fade-in-up">
-          <h2 style={{ fontSize: '3rem', marginBottom: '1rem' }}>LA EXCELENCIA ES <span style={{ color: 'var(--accent-primary)' }}>NUESTRO ESTÁNDAR</span></h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto' }}>Descubre el software definitivo para llevar el control absoluto de tu cuerpo y tus entrenamientos.</p>
+      <section className="section container" id="caracteristicas" style={{ position: 'relative' }}>
+        <div style={{ textAlign: 'center', marginBottom: '6rem' }} className="animate-fade-in-up">
+          <h2 style={{
+            fontSize: 'clamp(3rem, 5vw, 5.5rem)',
+            marginBottom: '1.5rem',
+            lineHeight: 0.9,
+            fontWeight: 900
+          }}>
+            INGENIERÍA APLICADA <br />
+            <span style={{
+              background: 'linear-gradient(to right, var(--accent-primary), #ff6b6b)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}>AL RENDIMIENTO</span>
+          </h2>
+          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '1.4rem', maxWidth: '700px', margin: '0 auto', fontWeight: 300, lineHeight: 1.6 }}>
+            Hemos deconstruido el entrenamiento tradicional para reconstruirlo con tecnología de precisión. Control absoluto en cada repetición.
+          </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem' }}>
           {[
             {
-              icon: <Dumbbell size={40} color="var(--accent-primary)" />,
-              title: 'CREADOR DE RUTINAS',
-              desc: 'Interfaz intuitiva que permite planificar entrenamientos. Añade series y selecciona ejercicios fácilmente.'
+              icon: <Dumbbell size={35} color="var(--accent-primary)" />,
+              title: 'Arquitectura de Rutinas',
+              desc: 'Diseña y organiza tus sesiones con una interfaz fluida diseñada para la sobrecarga progresiva.'
             },
             {
-              icon: <Activity size={40} color="var(--accent-primary)" />,
-              title: 'SEGUIMIENTO Y ESTADÍSTICAS',
-              desc: 'Visualiza tu evolución física y rendimiento muscular a través de métricas y gráficos en tiempo real.'
+              icon: <BarChart3 size={35} color="var(--accent-primary)" />,
+              title: 'Métricas de Élite',
+              desc: 'Visualiza tu evolución biométrica y marcas personales con gráficas dinámicas de alta resolución.'
             },
             {
-              icon: <Clock size={40} color="var(--accent-primary)" />,
-              title: 'GESTIÓN DE TIEMPOS',
-              desc: 'El software te guía indicando cuándo debes descansar mediante cronómetros integrados para optimizar el esfuerzo.'
+              icon: <Calendar size={35} color="var(--accent-primary)" />,
+              title: 'Mapa de Calor Térmico',
+              desc: 'Calendario inteligente que visualiza la intensidad y frecuencia de tus entrenamientos de un vistazo.'
             },
             {
-              icon: <Users size={40} color="var(--accent-primary)" />,
-              title: 'RECOMENDACIONES INTELIGENTES',
-              desc: 'Análisis de datos para proveer alertas automatizadas, mejorando tus rutinas basándose en ciencia deportiva.'
+              icon: <Bot size={35} color="var(--accent-primary)" />,
+              title: 'Nova AI Assistant',
+              desc: 'Consultoría táctica 24/7 integrada con Gemini para optimizar tu programación y resolver dudas.'
             }
           ].map((service, i) => (
-            <div key={i} className="glass-card animate-fade-in-up" style={{ animationDelay: `${i * 100}ms` }}>
-              <div style={{ marginBottom: '1.5rem', background: 'rgba(255, 42, 42, 0.1)', width: '80px', height: '80px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div key={i} className="glass-card animate-fade-in-up" style={{
+              animationDelay: `${i * 100}ms`,
+              borderRadius: '24px',
+              padding: '3rem',
+              border: '1px solid rgba(255,255,255,0.03)',
+              background: 'rgba(255,255,255,0.02)',
+              transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+            }}>
+              <div style={{
+                marginBottom: '2rem',
+                background: 'rgba(var(--accent-primary-rgb), 0.1)',
+                width: '70px', height: '70px',
+                borderRadius: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 10px 20px rgba(var(--accent-primary-rgb),0.1)'
+              }}>
                 {service.icon}
               </div>
-              <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>{service.title}</h3>
-              <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '2rem' }}>{service.desc}</p>
+              <h3 style={{ fontSize: '1.8rem', marginBottom: '1rem', fontFamily: 'Oswald', fontWeight: 700 }}>{service.title}</h3>
+              <p style={{ color: 'rgba(255,255,255,0.5)', lineHeight: 1.6, fontSize: '1.1rem' }}>{service.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Database & Profiles Section */}
       <section className="section" style={{ backgroundColor: 'rgba(25, 25, 28, 0.3)', borderTop: '1px solid var(--glass-border)' }} id="ejercicios">
         <div className="container">
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4rem', alignItems: 'center' }}>
@@ -147,7 +355,6 @@ export default async function Page() {
                 <li style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}><Target color="var(--accent-primary)" /> Niveles: Principiante a Experto</li>
                 <li style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}><Activity color="var(--accent-primary)" /> Tipos: Fuerza, Hipertrofia, Cardio</li>
               </ul>
-              <button className="btn-outline">EXPLORAR EJERCICIOS</button>
             </div>
 
             <div style={{ flex: '1 1 400px' }} id="perfiles">
@@ -169,7 +376,6 @@ export default async function Page() {
         </div>
       </section>
 
-      {/* Pricing Section */}
       <section className="section" style={{ backgroundColor: 'rgba(25, 25, 28, 0.4)' }} id="precios">
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
@@ -189,9 +395,8 @@ export default async function Page() {
               <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 2rem 0', display: 'flex', flexDirection: 'column', gap: '1rem', color: 'var(--text-muted)', flex: 1 }}>
                 <li style={{ display: 'flex', gap: '0.75rem' }}><CheckIcon /> Creador básico de rutinas</li>
                 <li style={{ display: 'flex', gap: '0.75rem' }}><CheckIcon /> Base de datos: 100 ejercicios</li>
-                <li style={{ display: 'flex', gap: '0.75rem' }}><CheckIcon /> Temporizador de descansos</li>
               </ul>
-              <button className="btn-outline" style={{ width: '100%', justifyContent: 'center' }}>CREAR CUENTA</button>
+              <Link href="/register" className="btn-outline" style={{ display: 'flex', justifyContent: 'center', textDecoration: 'none' }}>CREAR CUENTA</Link>
             </div>
 
             {/* Plan Premium */}
@@ -209,76 +414,73 @@ export default async function Page() {
                 <li style={{ display: 'flex', gap: '0.75rem' }}><CheckIcon /> Estadísticas avanzadas en gráficos</li>
                 <li style={{ display: 'flex', gap: '0.75rem' }}><CheckIcon /> Sugerencias mediante Inteligencia Artificial</li>
               </ul>
-              <button className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>HAZTE PRO AHORA</button>
+              <Link href="/checkout" className="btn-primary" style={{ display: 'flex', justifyContent: 'center', textDecoration: 'none' }}>HAZTE PRO AHORA</Link>
             </div>
           </div>
         </div>
       </section>
 
 
-      {/* Footer Avanzado SaaS */}
-      <footer style={{ backgroundColor: '#050505', paddingTop: '5rem', paddingBottom: '2rem', borderTop: '1px solid var(--glass-border)', color: 'var(--text-muted)' }}>
+      <footer style={{ backgroundColor: '#050505', paddingTop: '3rem', paddingBottom: '1.5rem', borderTop: '1px solid var(--glass-border)', color: 'var(--text-muted)' }}>
+        <style>{`
+          .footer-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.25s ease;
+          }
+          .footer-link:hover {
+            color: var(--accent-primary);
+          }
+        `}</style>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '4rem' }}>
-            
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '3rem', marginBottom: '2.5rem', textAlign: 'center' }}>
+
             {/* Columna 1: Marca y Redes */}
-            <div style={{ flex: '2 1 300px' }}>
-              <div style={{ fontSize: '2rem', fontWeight: 800, fontFamily: 'Oswald, sans-serif', color: 'white', letterSpacing: '2px', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div style={{ fontSize: '2.5rem', fontWeight: 900, fontFamily: 'Oswald, sans-serif', color: 'white', letterSpacing: '4px', marginBottom: '1rem' }}>
                 VIGOR<span style={{ color: 'var(--accent-primary)' }}>NOVA</span>
               </div>
-              <p style={{ lineHeight: 1.6, marginBottom: '2rem', maxWidth: '350px' }}>
-                Plataforma web de última generación para planificar y optimizar tus rutinas de gimnasio al extremo. Basado en ciencia.
+              <p style={{ lineHeight: 1.6, marginBottom: '1.5rem', maxWidth: '400px', fontSize: '1rem', color: 'rgba(255,255,255,0.5)' }}>
+                La arquitectura digital definitiva para atletas de alto rendimiento. Fusionamos biomecánica avanzada con una interfaz de vanguardia para quienes no aceptan la mediocridad.
               </p>
-              <div style={{ display: 'flex', gap: '1rem' }}>
-                <a href="#" style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', transition: 'background 0.3s' }}>
-                  <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              <div style={{ display: 'flex', gap: '1.5rem' }}>
+                <a href="https://www.instagram.com/vigornova/" target="_blank" rel="noopener noreferrer" style={{ width: '50px', height: '50px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', transition: 'all 0.3s' }}>
+                  <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" /></svg>
                 </a>
-                <a href="#" style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', transition: 'background 0.3s' }}>
-                  <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                <a href="https://x.com/VigorNovaFit" target="_blank" rel="noopener noreferrer" style={{ width: '50px', height: '50px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', transition: 'all 0.3s' }}>
+                  <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
                 </a>
               </div>
             </div>
 
             {/* Columna 2: Producto */}
             <div>
-              <h4 style={{ color: 'white', fontFamily: 'Oswald', fontSize: '1.2rem', marginBottom: '1.5rem', letterSpacing: '1px' }}>LA PLATAFORMA</h4>
-              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                <li><Link href="#caracteristicas" style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}>Características</Link></li>
-                <li><Link href="#ejercicios" style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}>Catálogo de Ejercicios</Link></li>
-                <li><Link href="#precios" style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}>Suscripción PRO</Link></li>
-                <li><Link href="/dashboard" style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}>Calculadora Dietética</Link></li>
+              <h4 style={{ color: 'white', fontFamily: 'Oswald', fontSize: '1.3rem', marginBottom: '1.2rem', letterSpacing: '2px' }}>LA PLATAFORMA</h4>
+              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.8rem', fontSize: '1rem' }}>
+                <li><Link href="#caracteristicas" className="footer-link">Características</Link></li>
+                <li><Link href="#ejercicios" className="footer-link">Catálogo de Ejercicios</Link></li>
+                <li><Link href="/checkout" className="footer-link" style={{ color: 'var(--accent-primary)', fontWeight: 600 }}>Suscripción PRO</Link></li>
               </ul>
             </div>
 
             {/* Columna 3: Empresa */}
             <div>
-              <h4 style={{ color: 'white', fontFamily: 'Oswald', fontSize: '1.2rem', marginBottom: '1.5rem', letterSpacing: '1px' }}>VIGORNOVA</h4>
-              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                <li><Link href="#" style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}>Sobre Nosotros</Link></li>
-                <li><Link href="#" style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}>Blog de Fitness</Link></li>
-                <li><Link href="#" style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}>Contacto y Soporte</Link></li>
-                <li><Link href="#" style={{ color: 'var(--accent-primary)', textDecoration: 'none', transition: 'color 0.2s', fontWeight: 600 }}>Programa de Afiliados</Link></li>
+              <h4 style={{ color: 'white', fontFamily: 'Oswald', fontSize: '1.3rem', marginBottom: '1.2rem', letterSpacing: '2px' }}>VIGORNOVA</h4>
+              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.8rem', fontSize: '1rem' }}>
+                <li><Link href="/sobre-nosotros" className="footer-link">Sobre Nosotros</Link></li>
+                <li><a href="mailto:eldohu15@gmail.com" className="footer-link">Contacto y Soporte</a></li>
               </ul>
-            </div>
-
-            {/* Columna 4: Newsletter */}
-            <div style={{ flex: '1 1 250px' }}>
-              <h4 style={{ color: 'white', fontFamily: 'Oswald', fontSize: '1.2rem', marginBottom: '1.5rem', letterSpacing: '1px' }}>ÚNETE AL BOOTCAMP</h4>
-              <p style={{ marginBottom: '1.5rem', fontSize: '0.9rem' }}>Suscríbete para recibir rutinas exclusivas y consejos de optimización fisiológica en tu correo.</p>
-              <form style={{ display: 'flex', gap: '0.5rem' }}>
-                <input type="email" placeholder="Email" required style={{ flex: 1, padding: '0.8rem', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)', color: 'white', outline: 'none' }} />
-                <button type="button" className="btn-primary" style={{ padding: '0 1rem' }}>UNIRME</button>
-              </form>
             </div>
           </div>
 
-          <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '2rem', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', fontSize: '0.9rem' }}>
+          <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', fontSize: '0.9rem' }}>
             <div>
               © {new Date().getFullYear()} VigorNova App. Todos los derechos reservados.
             </div>
             <div style={{ display: 'flex', gap: '1.5rem' }}>
-              <Link href="#" style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}>Política de Privacidad</Link>
-              <Link href="#" style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}>Términos de Servicio</Link>
+              <LegalLink href="/politica-privacidad">Política de Privacidad</LegalLink>
+              <LegalLink href="/terminos">Términos de Servicio</LegalLink>
+              <LegalLink href="/cookies">Política de Cookies</LegalLink>
             </div>
           </div>
         </div>
