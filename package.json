@@ -8,7 +8,7 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.6.0",
-    "next": "^15.0.3",
+    "next": "15.0.7",
     "postcss": "^8.5.13",
     "react": "^19.0.0-rc-66855b96-20241106",
     "react-body-highlighter": "^2.0.5",
