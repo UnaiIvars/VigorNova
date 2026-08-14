@@ -17,6 +17,9 @@ function parseAuthError(err: any): string {
   const msg = err?.message || String(err || '');
   const lower = msg.toLowerCase();
 
+  if (lower.includes('invalid api key') || lower.includes('api key not found') || lower.includes('apikey')) {
+    return 'Clave API de Supabase no configurada o no válida. Asegúrate de haber añadido las variables de entorno en Vercel (Project Settings -> Environment Variables).';
+  }
   if (lower.includes('fetch failed') || lower.includes('enotfound') || lower.includes('failed to fetch')) {
     return 'No se puede conectar con el servidor de base de datos (Supabase). Por favor, comprueba que tu proyecto de Supabase esté activo y las credenciales en .env.local sean válidas.';
   }
