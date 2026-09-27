@@ -53,13 +53,9 @@ VigorNova utiliza una arquitectura basada en **Next.js y TypeScript**, con **Sup
 
 ## Demo
 
-**[Ver VigorNova](#)**
-
-> [Añade aquí la URL de tu aplicación desplegada en Vercel](https://vigor-nova-ivory.vercel.app/).
+> [Demo](https://vigor-nova-ivory.vercel.app/).
 
 ## Capturas
-
-<!-- Añade aquí capturas de la aplicación -->
 
 ### Dashboard
 
